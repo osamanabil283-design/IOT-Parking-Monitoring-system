@@ -5,7 +5,7 @@ print("=== PARKING DATA ANALYSIS ===")
 print()
 
 # Load the CSV file
-df = pd.read_csv('data/raw/SPSRDATA.csv')
+df = pd.read_csv('data/raw/SPSIRDATA.csv')
 
 # Show basic info
 print(f"1. Total records in file: {len(df)}")

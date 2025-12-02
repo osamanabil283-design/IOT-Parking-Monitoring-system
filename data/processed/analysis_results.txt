@@ -1,0 +1,9 @@
+PARKING ANALYSIS RESULTS
+=========================
+Analysis Date: 2025-12-02 23:13:08.411899
+Total Records: 2,769
+Occupied Spots: 1,396 (50.4%)
+Free Spots: 1,373 (49.6%)
+Unique Sensors: 50
+First Sensor Reading: 2020-01-01 00:00:00 UTC
+Last Sensor Reading: 2023-12-07 06:35:00 UTC
