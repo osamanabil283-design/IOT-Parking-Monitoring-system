@@ -1,8 +1,8 @@
 \# IoT Parking Monitoring System
 
-\*Team:\* El manajek  
+\*Team:\* El manajek
 
-\*Course:\* Internet of Things and Applied Data Science - Fall 2025  
+\*Course:\* Internet of Things and Applied Data Science - Fall 2025
 
 \*Professor:\* Dr. Mehmet Ali Akyol
 
@@ -31,4 +31,12 @@ See docs/proposal.md for full project details.
 \## 👥 Team Members
 
 \[OSAMAH-SALEH/LOAI-KAHLIL/TARIG-MOHAMMAD]
+
+
+
+\## 🔗 Links
+
+\- \*GitHub Repository:\* https://github.com/osamanabil283-design/IOT-Parking-Monitoring-system
+
+\- \*Dataset Source:\* https://www.kaggle.com/datasets/suntech-sdn/iot-based-smart-parking-system-dataset 
 
