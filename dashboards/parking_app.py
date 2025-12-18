@@ -52,9 +52,15 @@ selected_sensors = st.sidebar.multiselect(
     default=df['field1'].unique()[:5]
 )
 
+# Get the actual min/max dates from YOUR data
+data_start_date = df['created_at'].min().date()
+data_end_date = df['created_at'].max().date()
+
 date_range = st.sidebar.date_input(
     "Date Range:",
-    value=[df['created_at'].min().date(), df['created_at'].max().date()]
+    value=[data_start_date, data_end_date],
+    min_value=data_start_date,
+    max_value=data_end_date
 )
 
 # Filter data
