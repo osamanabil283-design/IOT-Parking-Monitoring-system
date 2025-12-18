@@ -18,7 +18,12 @@ st.markdown("*Team:* El manajek | *Course:* IoT and Applied Data Science - Fall 
 # Load data
 @st.cache_data
 def load_data():
+    # Try multiple paths for different environments
+try:
     df = pd.read_csv('data/raw/SPSIRDATA.csv')
+except:
+    # For Streamlit Cloud
+    df = pd.read_csv('SPSIRDATA.csv')
     df['created_at'] = pd.to_datetime(df['created_at'])
     return df
 
