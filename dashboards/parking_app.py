@@ -72,15 +72,24 @@ with col1:
     st.metric("Total Records", f"{len(filtered_df):,}")
 
 with col2:
-    occupied = (filtered_df['field2'] == 1).sum()
+    # Use .sum(skipna=False) to handle NaN properly, then convert to int with fallback
+    occupied_raw = (filtered_df['field2'] == 1).sum(skipna=False)
+    # If the result is NaN (happens if filtered_df is empty), use 0
+    occupied = 0 if pd.isna(occupied_raw) else int(occupied_raw)
     st.metric("Occupied Spots", occupied)
 
 with col3:
-    free = (filtered_df['field2'] == 0).sum()
+    free_raw = (filtered_df['field2'] == 0).sum(skipna=False)
+    free = 0 if pd.isna(free_raw) else int(free_raw)
     st.metric("Free Spots", free)
 
 with col4:
-    occupancy_rate = occupied / len(filtered_df) * 100 if len(filtered_df) > 0 else 0
+    # Calculate rate safely using the new 'occupied' and 'free' integers
+    total_spots = occupied + free
+    if total_spots > 0:
+        occupancy_rate = (occupied / total_spots) * 100
+    else:
+        occupancy_rate = 0.0
     st.metric("Occupancy Rate", f"{occupancy_rate:.1f}%")
 
 # Visualizations
@@ -94,27 +103,26 @@ with chart_col1:
     st.write("Parking Occupancy Distribution")
     fig1, ax1 = plt.subplots(figsize=(6, 6))
     
-    # Ensure occupied and free are simple integers
-    try:
-        occ_val = int(occupied)  # Convert to integer
-        free_val = int(free)
-        sizes = [occ_val, free_val]
-        
-        # Check if we have valid data to plot
-        if sum(sizes) > 0:
-            ax1.pie(sizes,
-                    labels=['Occupied', 'Free'],
-                    autopct='%1.1f%%',
-                    colors=['#FF6B6B', '#4ECDC4'])
-            ax1.axis('equal')
-            st.pyplot(fig1)
-        else:
-            st.info("No data available for the selected filters.")
-            st.pyplot(fig1)  # Show empty figure
-    except Exception as e:
-        # If anything goes wrong, show an error and an empty chart
-        st.error(f"Could not generate pie chart. Error: {e}")
-        st.pyplot(fig1)  # Show empty figure anyway to avoid layout break
+    # Use the already-safe 'occupied' and 'free' integers
+    sizes = [occupied, free]
+    
+    # Only plot if there is actual data
+    if sum(sizes) > 0:
+        ax1.pie(sizes,
+                labels=['Occupied', 'Free'],
+                autopct='%1.1f%%',
+                colors=['#FF6B6B', '#4ECDC4'])
+        ax1.axis('equal')
+        st.pyplot(fig1)
+    else:
+        # Display a clear message on an empty chart
+        ax1.text(0.5, 0.5, 'No Data\nfor Filters',
+                 horizontalalignment='center',
+                 verticalalignment='center',
+                 transform=ax1.transAxes,
+                 fontsize=14)
+        ax1.axis('off')  # Hides the axes for a clean look
+        st.pyplot(fig1)
 
 with chart_col2:
     # Bar chart by sensor
