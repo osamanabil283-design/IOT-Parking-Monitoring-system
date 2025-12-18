@@ -18,8 +18,28 @@ st.markdown("*Team:* El manajek | *Course:* IoT and Applied Data Science - Fall 
 # Load data
 @st.cache_data
 def load_data():
-    df = pd.read_csv('data/raw/SPSIRDATA.csv')
-    df['created_at'] = pd.to_datetime(df['created_at'])
+    import os
+    
+    # Try multiple paths for different environments
+    if os.path.exists('data/raw/SPSIRDATA.csv'):
+        # Local development path
+        df = pd.read_csv('data/raw/SPSIRDATA.csv')
+    elif os.path.exists('SPSIRDATA.csv'):
+        # Root folder path (alternative local)
+        df = pd.read_csv('SPSIRDATA.csv')
+    elif os.path.exists('dashboards/SPSIRDATA.csv'):
+        # Render.com deployment path
+        df = pd.read_csv('dashboards/SPSIRDATA.csv')
+    else:
+        # If no file found, create empty dataframe with error message
+        st.error("❌ CSV data file not found! Please check file locations.")
+        # Create empty dataframe to prevent crashes
+        df = pd.DataFrame(columns=['created_at', 'entry_id', 'field1', 'field2', 'field3'])
+    
+    # Convert timestamp if we have data
+    if not df.empty:
+        df['created_at'] = pd.to_datetime(df['created_at'])
+    
     return df
 
 df = load_data()
