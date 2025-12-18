@@ -91,14 +91,30 @@ chart_col1, chart_col2 = st.columns(2)
 
 with chart_col1:
     # Pie chart
-    st.write("*Parking Occupancy Distribution*")
+    st.write("Parking Occupancy Distribution")
     fig1, ax1 = plt.subplots(figsize=(6, 6))
-    ax1.pie([occupied, free], 
-            labels=['Occupied', 'Free'], 
-            autopct='%1.1f%%',
-            colors=['#FF6B6B', '#4ECDC4'])
-    ax1.axis('equal')
-    st.pyplot(fig1)
+    
+    # Ensure occupied and free are simple integers
+    try:
+        occ_val = int(occupied)  # Convert to integer
+        free_val = int(free)
+        sizes = [occ_val, free_val]
+        
+        # Check if we have valid data to plot
+        if sum(sizes) > 0:
+            ax1.pie(sizes,
+                    labels=['Occupied', 'Free'],
+                    autopct='%1.1f%%',
+                    colors=['#FF6B6B', '#4ECDC4'])
+            ax1.axis('equal')
+            st.pyplot(fig1)
+        else:
+            st.info("No data available for the selected filters.")
+            st.pyplot(fig1)  # Show empty figure
+    except Exception as e:
+        # If anything goes wrong, show an error and an empty chart
+        st.error(f"Could not generate pie chart. Error: {e}")
+        st.pyplot(fig1)  # Show empty figure anyway to avoid layout break
 
 with chart_col2:
     # Bar chart by sensor
