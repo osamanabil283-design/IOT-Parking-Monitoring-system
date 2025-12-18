@@ -126,15 +126,28 @@ with chart_col1:
 
 with chart_col2:
     # Bar chart by sensor
-    st.write("*Occupancy by Sensor*")
+    st.write("Occupancy by Sensor")
     sensor_counts = filtered_df.groupby('field1')['field2'].mean().sort_values(ascending=False)
     fig2, ax2 = plt.subplots(figsize=(8, 6))
-    sensor_counts.head(10).plot(kind='bar', ax=ax2, color='#45B7D1')
-    ax2.set_xlabel("Sensor ID")
-    ax2.set_ylabel("Occupancy Rate")
-    ax2.set_title("Top 10 Sensors by Occupancy")
-    plt.xticks(rotation=45)
-    st.pyplot(fig2)
+    
+    # ONLY plot if we have sensor data
+    if not sensor_counts.empty:
+        # Plot top 10 sensors (or fewer if less than 10 exist)
+        sensor_counts.head(10).plot(kind='bar', ax=ax2, color='#45B7D1')
+        ax2.set_xlabel("Sensor ID")
+        ax2.set_ylabel("Occupancy Rate")
+        ax2.set_title("Top 10 Sensors by Occupancy")
+        plt.xticks(rotation=45)
+        st.pyplot(fig2)
+    else:
+        # Display a message on an empty chart
+        ax2.text(0.5, 0.5, 'No Sensor Data\nfor Filters',
+                 horizontalalignment='center',
+                 verticalalignment='center',
+                 transform=ax2.transAxes,
+                 fontsize=14)
+        ax2.axis('off')  # Hides the axes
+        st.pyplot(fig2)
 
 # Time series chart
 st.subheader("📅 Occupancy Over Time")
